@@ -39,6 +39,10 @@ jobs:
         run: yarn install
       - name: Build
         run: yarn build
+        env:
+          VITE_ALCHEMY_ID: ${{ secrets.VITE_ALCHEMY_ID }}
+          VITE_CONTRACT_ADDRESS: ${{ secrets.VITE_CONTRACT_ADDRESS }}
+          VITE_NETWORK: ${{ secrets.VITE_NETWORK }}
       - name: Setup Pages
         uses: actions/configure-pages@v3
       - name: Upload artifact
