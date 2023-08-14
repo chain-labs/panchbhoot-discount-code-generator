@@ -93,6 +93,7 @@ function App() {
 
   async function fetchCurrentDiscountCodeIndex() {
     // fetch data from smart contract
+    console.log(`Current Discount Index is: ${existingDiscountCodes.length + 1}`);
     return existingDiscountCodes.length + 1;
   }
 
