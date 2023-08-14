@@ -9,7 +9,7 @@ import Naviagtion from './containers/Navigation';
 import { useContractReads, usePublicClient, useWalletClient } from 'wagmi';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { solidityKeccak256 } from 'ethers/lib/utils';
-import { collection, doc, setDoc, getDocs } from 'firebase/firestore';
+import { collection, doc, setDoc, getDocs, getCountFromServer } from 'firebase/firestore';
 import { db } from './db/firebase';
 import panchbhootContractAbi from "./panchbhootContractAbi";
 import { getContract } from 'viem'
@@ -92,9 +92,11 @@ function App() {
   }
 
   async function fetchCurrentDiscountCodeIndex() {
-    // fetch data from smart contract
-    console.log(`Current Discount Index is: ${existingDiscountCodes.length + 1}`);
-    return existingDiscountCodes.length + 1;
+    // fetch data from database
+    const currentDiscountIndex = (await getCountFromServer(collection(db, 'discountCodes'))).data().count;
+    const nextDiscountIndex = currentDiscountIndex + 1;
+    console.log(`Current Discount Index is: ${nextDiscountIndex}`);
+    return nextDiscountIndex;
   }
 
   function generateDiscountMessage(
