@@ -164,8 +164,10 @@ function App() {
     }
     // fetch price
     const salePrice = saleData.price;
+    console.log(salePrice);
     // calculate discounted price
-    const discountedPrice = salePrice.mul(discountPercentage).div(100);
+    const discountedPrice = ethers.BigNumber.from(salePrice.toString()).mul(discountPercentage).div(100);
+    console.log(discountedPrice);
     // generate code
     const discountMessage = generateDiscountMessage(currentDiscountIndex, discountedPrice, receiverAddress);
     const discountSignature = await signer.signMessage({ message: discountMessage });
