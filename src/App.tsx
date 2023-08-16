@@ -119,9 +119,8 @@ function App() {
     saleIndex: number,
   ) {
     try {
-      await setDoc(doc(db, 'discountCodes', existingDiscountCodes.length + 1), {
+      await setDoc(doc(db, 'discountCodes', discountCode), {
         discountIndex: currentDiscountIndex,
-        discountCode: discountCode,
         discountedPrice: discountedPrice.toString(),
         discountSignature,
         receiverAddress,
