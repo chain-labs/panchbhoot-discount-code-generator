@@ -169,7 +169,7 @@ function App() {
     console.log(discountedPrice);
     // generate code
     const discountMessage = generateDiscountMessage(currentDiscountIndex, discountedPrice, receiverAddress);
-    const discountSignature = await signer.signMessage({ message: discountMessage });
+    const discountSignature = await signer.signMessage({ message: {raw: discountMessage} });
     const discountResposne = {
       discountIndex: currentDiscountIndex,
       discountedPrice,
