@@ -7,6 +7,7 @@ import { BigNumber, BytesLike } from 'ethers';
 import DiscountCodeLists from './containers/DiscountCodeLists';
 import Naviagtion from './containers/Navigation';
 import { useContractReads, usePublicClient, useWalletClient } from 'wagmi';
+import { signMessage } from '@wagmi/core'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { solidityKeccak256 } from 'ethers/lib/utils';
 import { collection, doc, setDoc, getDocs, getCountFromServer } from 'firebase/firestore';
@@ -14,7 +15,7 @@ import { db } from './db/firebase';
 import panchbhootContractAbi from "./panchbhootContractAbi";
 import { getContract } from 'viem'
 
-export const DISCOUNT_CODE_MESSAGE = '://Panchabhoot Discount Code';
+export const DISCOUNT_CODE_MESSAGE = "://Panchabhoot Discount Code";
 
 export const Navs = {
   GENERATE_CODE: 'GENERATE_CODE',
@@ -164,12 +165,15 @@ function App() {
     // fetch price
     const salePrice = saleData.price;
     console.log(salePrice);
+    if(discountPercentage > 100) {
+      throw Error("Discount cannot be more than 100%");
+    }
     // calculate discounted price
-    const discountedPrice = ethers.BigNumber.from(salePrice.toString()).mul(discountPercentage).div(100);
-    console.log(discountedPrice);
+    const discountedPrice = ethers.BigNumber.from(salePrice.toString()).mul(100-discountPercentage).div(100);
     // generate code
     const discountMessage = generateDiscountMessage(currentDiscountIndex, discountedPrice, receiverAddress);
-    const discountSignature = await signer.signMessage({ message: {raw: discountMessage} });
+    const discountSignature = await signMessage({message: {raw: discountMessage}});
+    console.log(discountSignature);
     const discountResposne = {
       discountIndex: currentDiscountIndex,
       discountedPrice,
