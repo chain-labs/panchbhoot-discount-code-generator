@@ -13,13 +13,14 @@
   ```
 */
 import { BytesLike, Wallet, ethers } from 'ethers';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import readXlsxFile from 'read-excel-file';
 import { CircleCheckFill, CircleXFill } from 'akar-icons';
 import { getContract } from 'viem';
 import panchbhootContractAbi from '../panchbhootContractAbi';
 import { publicClient } from './ConnectWallet';
+import toast from 'react-hot-toast';
 
 export default function BulkDiscountGeneratorForm({
   discountSignerAddress,
@@ -29,6 +30,7 @@ export default function BulkDiscountGeneratorForm({
   generateCodeAndStore: Function;
 }) {
   const [discountCodes, setDiscountCodes] = useState([]);
+  const [discountFiles, setDiscountFiles] = useState();
   const [discountPercentage, setDiscountPercentage] = useState();
   const [privateKey, setPrivateKey] = useState('');
   const [discountPrefix, setDiscountPrefix] = useState('');
@@ -41,7 +43,8 @@ export default function BulkDiscountGeneratorForm({
   const [isCodeGenerated, setIsCodeGenerated] = useState(false);
 
   function handleDiscountCodeEvent(event: any) {
-    const value = event.target.files[0];
+    const value: File = event.target.files[0];
+    setDiscountFiles(value);
     readXlsxFile(value).then((rows) => {
       const codes = rows.slice(1);
       setDiscountCodes(codes);
@@ -67,7 +70,6 @@ export default function BulkDiscountGeneratorForm({
     setSaleIndex(value);
   }
 
-
   async function handleGenerateCode(discount) {
     setIsCodeGenerated(false);
     setIsGeneratingCode(true);
@@ -78,6 +80,16 @@ export default function BulkDiscountGeneratorForm({
     setIsGeneratingCode(false);
     setIsCodeGenerated(true);
   }
+
+  useEffect(() => {
+    if (isCodeGenerated) {
+      setDiscountCodes([]);
+      inputFileRef.current.value = '';
+      toast.success(`Succesfully created ${discountCodes.length} discount codes!`);
+    }
+  }, [isCodeGenerated]);
+
+  const inputFileRef = useRef(null);
 
   return (
     <form>
@@ -135,12 +147,12 @@ export default function BulkDiscountGeneratorForm({
               <div className="mt-2">
                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
                   <input
+                    ref={inputFileRef}
                     type="file"
                     onChange={handleDiscountCodeEvent}
                     name="discountCode"
                     id="discountCode"
                     className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                    placeholder="PANCH-DIWALI"
                     required
                   />
                 </div>

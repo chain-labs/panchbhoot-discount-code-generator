@@ -15,6 +15,7 @@ import { db } from './db/firebase';
 import panchbhootContractAbi from './panchbhootContractAbi';
 import { getContract } from 'viem';
 import BulkDiscountGeneratorForm from './containers/BulkDiscountGenerator';
+import { Toaster } from 'react-hot-toast';
 
 export const DISCOUNT_CODE_MESSAGE = '://Panchabhoot Discount Code';
 
@@ -278,7 +279,7 @@ function App() {
         discountResposne.discountSignature
       }`;
       console.log({
-        discountCode: `${discountPrefix.toUpperCase()}-${code[0]}-${code[1]}-${code[2]}`,
+        discountCode: `${discountPrefix.toUpperCase()}-${code[0]}-${code[1]}-${code[2].toUpperCase()}`,
         currentDiscountIndex,
         discountedPrice: discountedPrice.toString(),
         discountSignature,
@@ -287,7 +288,7 @@ function App() {
       });
       // store code
       const status = await storeDiscountCodeOnFirestore(
-        `${discountPrefix.toUpperCase()}-${code[0]}-${code[1]}-${code[2]}`,
+        `${discountPrefix.toUpperCase()}-${code[0]}-${code[1]}-${code[2].toUpperCase()}`,
         currentDiscountIndex,
         discountedPrice,
         discountSignature,
@@ -299,6 +300,9 @@ function App() {
 
   return (
     <div className={styles['App']}>
+      <div>
+        <Toaster />
+      </div>
       {isConnected && signer?.account.address ? (
         <>
           <Naviagtion changeNav={setNavigation} currentNav={nav} />
