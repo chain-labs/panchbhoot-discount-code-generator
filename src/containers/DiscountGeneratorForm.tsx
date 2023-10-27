@@ -174,7 +174,7 @@ export default function DiscountGeneratorForm({
       {isCodeGenerated ? (
         <>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            Status: {success.toString()} <br/>
+            Status: {success.toString()} <br />
             Message: {message}
           </p>
         </>

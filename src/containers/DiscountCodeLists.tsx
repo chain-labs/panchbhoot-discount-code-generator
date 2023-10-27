@@ -5,7 +5,7 @@ export default function DiscountCodeLists({ existingDiscountCodes }: { existingD
     <div className="space-y-12">
       <div className="border-b border-gray-900/10 pb-12">
         <h2 className="text-base font-semibold leading-7 text-gray-900">Panchbhoot Discount Codes</h2>
-        <ul role="list" className="divide-y divide-gray-100">
+        <ul className="divide-y divide-gray-100">
           {existingDiscountCodes &&
             existingDiscountCodes.map((code: any) => (
               <li key={code.id} className="flex justify-between gap-x-6 py-5">
