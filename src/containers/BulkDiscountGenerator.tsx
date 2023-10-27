@@ -30,7 +30,6 @@ export default function BulkDiscountGeneratorForm({
   generateCodeAndStore: Function;
 }) {
   const [discountCodes, setDiscountCodes] = useState([]);
-  const [discountFiles, setDiscountFiles] = useState();
   const [discountPercentage, setDiscountPercentage] = useState();
   const [privateKey, setPrivateKey] = useState('');
   const [discountPrefix, setDiscountPrefix] = useState('');
@@ -43,8 +42,7 @@ export default function BulkDiscountGeneratorForm({
   const [isCodeGenerated, setIsCodeGenerated] = useState(false);
 
   function handleDiscountCodeEvent(event: any) {
-    const value: File = event.target.files[0];
-    setDiscountFiles(value);
+    const value = event.target.files[0];
     readXlsxFile(value).then((rows) => {
       const codes = rows.slice(1);
       setDiscountCodes(codes);
